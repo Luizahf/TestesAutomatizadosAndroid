@@ -91,4 +91,50 @@ public class LeilaoTest {
         assertEquals(300, tresLances.get(1).getValor(), DELTA);
         assertEquals(200, tresLances.get(2).getValor(), DELTA);
     }
+
+    @Test
+    public void deve_DevolverTresMaioresLances_quando_NaoRecebeLances() {
+        List<Lance> tresLances =  console.tresMaioresLances();
+        assertEquals(0, tresLances.size());
+    }
+
+    @Test
+    public void deve_DevolverTresMaioresLances_quando_RecebeApenasUmLance() {
+        console.propoe(new Lance(alex, 200.0));
+
+        List<Lance> tresLances =  console.tresMaioresLances();
+        assertEquals(1, tresLances.size());
+        assertEquals(200, tresLances.get(0).getValor(), DELTA);
+    }
+
+    @Test
+    public void deve_DevolverTresMaioresLances_quando_RecebeApenasDoisLances() {
+        console.propoe(new Lance(alex, 200.0));
+        console.propoe(new Lance(eu, 300.0));
+
+        List<Lance> tresLances =  console.tresMaioresLances();
+        assertEquals(2, tresLances.size());
+        assertEquals(200, tresLances.get(1).getValor(), DELTA);
+        assertEquals(300, tresLances.get(0).getValor(), DELTA);
+    }
+
+    @Test
+    public void deve_DevolverTresMaioresLances_quando_RecebeApenasMaisDeTresLances() {
+        console.propoe(new Lance(alex, 300.0));
+        console.propoe(new Lance(eu, 400.0));
+        console.propoe(new Lance(new Usuario("Fran"), 500.0));
+        console.propoe(new Lance(eu, 600.0));
+
+        List<Lance> tresLances =  console.tresMaioresLances();
+        assertEquals(3, tresLances.size());
+        assertEquals(400, tresLances.get(2).getValor(), DELTA);
+        assertEquals(500, tresLances.get(1).getValor(), DELTA);
+        assertEquals(600, tresLances.get(0).getValor(), DELTA);
+
+        console.propoe(new Lance(eu, 700.0));tresLances =  console.tresMaioresLances();
+        assertEquals(3, tresLances.size());
+        assertEquals(500, tresLances.get(2).getValor(), DELTA);
+        assertEquals(600, tresLances.get(1).getValor(), DELTA);
+        assertEquals(700, tresLances.get(0).getValor(), DELTA);
+    }
 }

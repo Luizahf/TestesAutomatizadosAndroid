@@ -30,6 +30,13 @@ public class LancesLeilaoActivity extends AppCompatActivity {
             menorLance.setText(String.valueOf(leilao.getMenorLance()));
             TextView maiorLance = findViewById(R.id.lances_leilao_maior_lance);
             maiorLance.setText(String.valueOf(leilao.getMaiorLance()));
+            TextView maioresLances = findViewById(R.id.lances_leilao_maiores_lances);
+            StringBuilder sb = new StringBuilder();
+            for (Lance lance : leilao.tresMaioresLances()) {
+                sb.append(lance.getValor() + "\n");
+            }
+            String maioresLancesTxt = sb.toString();
+            maioresLances.setText((maioresLancesTxt));
         }
     }
 
