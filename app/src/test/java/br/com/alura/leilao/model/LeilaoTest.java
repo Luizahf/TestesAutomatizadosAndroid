@@ -71,15 +71,6 @@ public class LeilaoTest {
     }
 
     @Test
-    public void deve_DevolverMenorLance_quando_RecebeMaisDeUmLanceEmOrdemDecrescent() {
-        console.propoe(new Lance(alex, 10000.0));
-        console.propoe(new Lance(eu, 9000.0));
-
-        double menorLanceDevolvidoCarro = console.getMenorLance();
-        assertEquals(9000.0, menorLanceDevolvidoCarro, DELTA);
-    }
-
-    @Test
     public void deve_DevolverTresMaioresLances_quando_RecebeExatosTresLances() {
         console.propoe(new Lance(alex, 200.0));
         console.propoe(new Lance(eu, 300.0));
@@ -136,5 +127,26 @@ public class LeilaoTest {
         assertEquals(500, tresLances.get(2).getValor(), DELTA);
         assertEquals(600, tresLances.get(1).getValor(), DELTA);
         assertEquals(700, tresLances.get(0).getValor(), DELTA);
+    }
+
+    @Test
+    public void deve_DevolverZeroParaMaiorLance_qauando_NaoTiverLances() {
+        double maiorLance = console.getMaiorLance();
+        assertEquals(0.0, maiorLance, DELTA);
+    }
+
+    @Test
+    public void deve_DevolverZeroParaMenorLance_qauando_NaoTiverLances() {
+        double menorLance = console.getMenorLance();
+        assertEquals(0.0, menorLance, DELTA);
+    }
+
+    @Test
+    public void naoDeve_AdicionarLance_quando_ForMenorQueOMaiorLance() {
+        console.propoe(new Lance(alex, 500.0));
+        console.propoe(new Lance(eu, 400.0));
+
+        int quantidadeLances = console.quantidadeLances();
+        assertEquals(1, quantidadeLances);
     }
 }
