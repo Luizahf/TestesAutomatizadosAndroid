@@ -122,7 +122,8 @@ public class LeilaoTest {
         assertEquals(500, tresLances.get(1).getValor(), DELTA);
         assertEquals(600, tresLances.get(0).getValor(), DELTA);
 
-        console.propoe(new Lance(eu, 700.0));tresLances =  console.tresMaioresLances();
+        console.propoe(new Lance(alex, 700.0));
+        tresLances =  console.tresMaioresLances();
         assertEquals(3, tresLances.size());
         assertEquals(500, tresLances.get(2).getValor(), DELTA);
         assertEquals(600, tresLances.get(1).getValor(), DELTA);
@@ -148,5 +149,33 @@ public class LeilaoTest {
 
         int quantidadeLances = console.quantidadeLances();
         assertEquals(1, quantidadeLances);
+    }
+
+    @Test
+    public void naoDeve_AdicionarLance_quando_ForMesmoUsuarioUltimoLance() {
+        console.propoe(new Lance(eu, 400.0));
+        console.propoe(new Lance(new Usuario("Eu"), 600.0));
+
+        int quantidadeLances = console.quantidadeLances();
+        assertEquals(1, quantidadeLances);
+    }
+
+    @Test
+    public void naoDeve_AdicionarLance_quando_UsuarioDerCincoLances() {
+        console.propoe(new Lance(eu, 100.0));
+        console.propoe(new Lance(alex, 200.0));
+        console.propoe(new Lance(eu, 300.0));
+        console.propoe(new Lance(alex, 400.0));
+        console.propoe(new Lance(eu, 500.0));
+        console.propoe(new Lance(alex, 600.0));
+        console.propoe(new Lance(eu, 700.0));
+        console.propoe(new Lance(alex, 800.0));
+        console.propoe(new Lance(eu, 900.0));
+        console.propoe(new Lance(alex, 1000.0));
+        console.propoe(new Lance(eu, 1100.0));
+        console.propoe(new Lance(alex, 1200.0));
+
+        int quantidadeLances = console.quantidadeLances();
+        assertEquals(10, quantidadeLances);
     }
 }

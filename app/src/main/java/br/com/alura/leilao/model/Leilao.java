@@ -19,17 +19,34 @@ public class Leilao implements Serializable {
 
     public void propoe(Lance lance) {
         double valorLance = lance.getValor();
-        if (maiorLance > valorLance) {
-            return;
+        if (podeProporLance(lance)) {
+            lances.add(lance);
+            if (lances.size() == 1) {
+                maiorLance = valorLance;
+                menorLance = valorLance;
+            }
+            Collections.sort(lances);
+            calculaMaiorLance(valorLance);
+            calculaMenorLance(valorLance);
         }
-        lances.add(lance);
-        if (lances.size() == 1) {
-            maiorLance = valorLance;
-            menorLance = valorLance;
+    }
+
+    private boolean podeProporLance(Lance lance) {
+        return !(maiorLance > lance.getValor() || usuarioJaDeuLance(lance) || usuarioJaDeuCincoLances(lance));
+    }
+
+    private boolean usuarioJaDeuCincoLances(Lance lance) {
+        int lancesDoUsuario = 0;
+        for (Lance l : lances) {
+            if (l.getUsuario().equals(lance.getUsuario()))
+                lancesDoUsuario++;
         }
-        Collections.sort(lances);
-        calculaMaiorLance(valorLance);
-        calculaMenorLance(valorLance);
+        return  lancesDoUsuario == 5;
+    }
+
+    private boolean usuarioJaDeuLance(Lance lance) {
+        return !lances.isEmpty() &&
+                lance.getUsuario().equals(lances.get(0).getUsuario());
     }
 
     private void calculaMenorLance(double valorLance) {

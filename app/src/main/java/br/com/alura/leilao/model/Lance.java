@@ -22,4 +22,10 @@ public class Lance implements Serializable, Comparable<Lance> {
     public int compareTo(@NonNull Lance o) {
         return Double.compare(o.getValor(), valor);
     }
+
+    public Usuario getUsuario() {
+        return usuario;
+    }
+
+
 }
