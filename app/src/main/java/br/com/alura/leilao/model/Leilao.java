@@ -32,7 +32,13 @@ public class Leilao implements Serializable {
     }
 
     private boolean podeProporLance(Lance lance) {
-        return !(maiorLance > lance.getValor() || usuarioJaDeuLance(lance) || usuarioJaDeuCincoLances(lance));
+        return !(lanceMenorQueUltimoLance(lance) || usuarioJaDeuLance(lance) || usuarioJaDeuCincoLances(lance));
+    }
+
+    private boolean lanceMenorQueUltimoLance(Lance lance) {
+        boolean menor = maiorLance > lance.getValor();
+        if (menor) throw new RuntimeException("Lance menor que o maior lance.");
+        return false;
     }
 
     private boolean usuarioJaDeuCincoLances(Lance lance) {
@@ -41,12 +47,16 @@ public class Leilao implements Serializable {
             if (l.getUsuario().equals(lance.getUsuario()))
                 lancesDoUsuario++;
         }
-        return  lancesDoUsuario == 5;
+        boolean lancesDados = lancesDoUsuario == 5;
+        if (lancesDados) throw new RuntimeException("Usuário já deu cinco lances.");
+        return false;
     }
 
     private boolean usuarioJaDeuLance(Lance lance) {
-        return !lances.isEmpty() &&
+        boolean jaDeu = !lances.isEmpty() &&
                 lance.getUsuario().equals(lances.get(0).getUsuario());
+        if (jaDeu) throw new RuntimeException("Mesmo usuário do último lance.");
+        return false;
     }
 
     private void calculaMenorLance(double valorLance) {
