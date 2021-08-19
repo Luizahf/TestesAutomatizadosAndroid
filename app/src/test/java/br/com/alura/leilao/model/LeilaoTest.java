@@ -1,8 +1,17 @@
 package br.com.alura.leilao.model;
 
+import org.hamcrest.Matchers;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
+
+import static org.hamcrest.CoreMatchers.both;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.hasItem;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.Matchers.contains;
+import static org.hamcrest.Matchers.hasSize;
+import static org.junit.Assert.assertThat;
 
 import java.util.List;
 
@@ -31,7 +40,7 @@ public class LeilaoTest {
         String descricao = console.getDescricao();
 
         // Assert
-        assertEquals("Console", descricao);
+        assertThat(descricao, is("Console"));
     }
 
     @Test
@@ -71,8 +80,7 @@ public class LeilaoTest {
         console.propoe(new Lance(alex, 200.0));
 
         double menorLance = console.getMenorLance();
-
-        assertEquals(200.0, menorLance, DELTA);
+        assertThat(menorLance, equalTo(200.0));
     }
 
     @Test
@@ -91,10 +99,12 @@ public class LeilaoTest {
         console.propoe(new Lance(alex, 400.0));
 
         List<Lance> tresLances =  console.tresMaioresLances();
-        assertEquals(3, tresLances.size());
-        assertEquals(400, tresLances.get(0).getValor(), DELTA);
-        assertEquals(300, tresLances.get(1).getValor(), DELTA);
-        assertEquals(200, tresLances.get(2).getValor(), DELTA);
+        assertThat(tresLances, hasSize(3));
+        assertThat(tresLances, contains(
+                new Lance(alex, 400.0),
+                new Lance(eu, 300.0),
+                new Lance(alex, 200.0)
+        ));
     }
 
     @Test
