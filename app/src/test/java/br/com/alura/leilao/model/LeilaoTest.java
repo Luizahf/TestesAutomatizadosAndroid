@@ -1,8 +1,14 @@
 package br.com.alura.leilao.model;
 
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 import java.util.List;
+
+import br.com.alura.leilao.exception.LanceMenorQueUltimoLanceException;
+import br.com.alura.leilao.exception.LanceSequidoDoMesmoUsuarioException;
+import br.com.alura.leilao.exception.UsuarioDeuCincoLancesException;
 
 import static org.junit.Assert.*;
 
@@ -15,6 +21,9 @@ public class LeilaoTest {
     private final Leilao console = new Leilao("Console");
     private final Usuario alex = new Usuario("Alex");
     private final Usuario eu = new Usuario("Eu");
+
+    @Rule
+    public ExpectedException exception = ExpectedException.none();
 
     @Test
     public void getDescricao_QuandoRecebeDescricao_RetornaDescricao() {
@@ -147,46 +156,31 @@ public class LeilaoTest {
         assertEquals(0.0, menorLance, DELTA);
     }
 
-    @Test
+    @Test(expected =  LanceMenorQueUltimoLanceException.class)
     public void deve_LancarException_quando_ForMenorQueOMaiorLance() {
         console.propoe(new Lance(alex, 500.0));
-        try {
-            console.propoe(new Lance(eu, 400.0));
-            fail("Era esperado runtime exception");
-        } catch (RuntimeException e) {
-            assertEquals("Lance menor que o maior lance.", e.getMessage());
-        }
+        console.propoe(new Lance(eu, 400.0));
     }
 
-    @Test
+    @Test(expected =  LanceSequidoDoMesmoUsuarioException.class)
     public void deve_LancarException_quando_ForMesmoUsuarioUltimoLance() {
         console.propoe(new Lance(eu, 400.0));
-        try {
-            console.propoe(new Lance(new Usuario("Eu"), 600.0));
-            fail("Era esperado runtime exception");
-        } catch (RuntimeException e) {
-            assertEquals("Mesmo usuário do último lance.", e.getMessage());
-        }
+        console.propoe(new Lance(new Usuario("Eu"), 600.0));
     }
 
-    @Test
+    @Test(expected =  UsuarioDeuCincoLancesException.class)
     public void deve_LancarException_quando_UsuarioDerCincoLances() {
-        try {
-            console.propoe(new Lance(eu, 100.0));
-            console.propoe(new Lance(alex, 200.0));
-            console.propoe(new Lance(eu, 300.0));
-            console.propoe(new Lance(alex, 400.0));
-            console.propoe(new Lance(eu, 500.0));
-            console.propoe(new Lance(alex, 600.0));
-            console.propoe(new Lance(eu, 700.0));
-            console.propoe(new Lance(alex, 800.0));
-            console.propoe(new Lance(eu, 900.0));
-            console.propoe(new Lance(alex, 1000.0));
-            console.propoe(new Lance(eu, 1100.0));
 
-            fail("Era esperado runtime exception");
-        } catch (RuntimeException e) {
-            assertEquals("Usuário já deu cinco lances.", e.getMessage());
-        }
+        console.propoe(new Lance(eu, 100.0));
+        console.propoe(new Lance(alex, 200.0));
+        console.propoe(new Lance(eu, 300.0));
+        console.propoe(new Lance(alex, 400.0));
+        console.propoe(new Lance(eu, 500.0));
+        console.propoe(new Lance(alex, 600.0));
+        console.propoe(new Lance(eu, 700.0));
+        console.propoe(new Lance(alex, 800.0));
+        console.propoe(new Lance(eu, 900.0));
+        console.propoe(new Lance(alex, 1000.0));
+        console.propoe(new Lance(eu, 1100.0));
     }
 }
